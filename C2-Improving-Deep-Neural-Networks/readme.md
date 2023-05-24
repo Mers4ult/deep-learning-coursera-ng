@@ -587,8 +587,9 @@ _Notation_<br>
 - In the last layer we will have to activate the softmax activation function instead of the sigmoid activation.
 
 _Softmax activation equations_<br>
-```t = e^(Z[L]) # shape(C, m)
-A[L] = e^(Z[L]) / sum(t) # shape(C, m), sum(t) - sum of t's for each example (shape (1, m))
+```
+t = e^(Z[L])              # shape(C, m)
+A[L] = e^(Z[L]) / sum(t)  # shape(C, m), sum(t) - sum of t's for each example (shape (1, m))
 ```
 Use softmax activation function.
 
