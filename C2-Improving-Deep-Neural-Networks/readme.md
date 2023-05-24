@@ -514,21 +514,33 @@ As for `beta`, use the same logarithmic scale method for `1-beta`.
 
 #### Hyperparameters tuning in practice: Panda vs. Caviar
 
+- Intuitions about hyperparameter settings from one application area may or may not transfer to a different one.
+
 - **Panda approach**: Not enough computational capacity: babysitting one model
+  - Day 0 you might initialize your parameter as random and then start training.
+  - Monitor your learning curve gradually decrease over the day.
+  - Each day you nudge your parameters a little during training.
+
 - **Caviar approach**: training many models in parallel
 
 ### Batch Normalization
 
 #### Normalizing activations in a network
 
-- Batch normalization makes your hyperparameter search problem much easier, makes your neural network much more robust.
-- What batch norm does is it applies that normalization process not just to the input layer, but to the values even deep in some hidden layer in the neural network. So it will apply this type of normalization to normalize the mean and
-variance of `z[i]` of hidden units.
+- Batch normalization makes your hyperparameter search problem much easier, makes your neural network much more robust, and faster to train.
+- Before (in the input layer and logreg) we normalized the inputs by subtracting the mean and dividing by variance. This helped a lot for the shape of the cost function and for reaching the minimum point faster.
+  - The question is: for any hidden layer can we normalize `A[l]` to train `W[l+1]` , `b[l+1]` (since `A[l]` is the input to the next layer) faster? => batch normalization.
+- What batch norm does is it applies that normalization process not just to the input layer, but to the values even deep in some hidden layer in the neural network. So it will apply this type of normalization to normalize the mean and variance of `z[i]` of hidden units.
 - One difference between the training input and these hidden unit values is that you might not want your hidden unit values be forced to have mean 0 and variance 1.
   - For example, if you have a sigmoid activation function, you don't want your values to always be clustered in the normal distribution around `0`. You might want them to have a larger variance or have a mean that's different than 0, in order to better take advantage of the nonlinearity of the sigmoid function rather than have all your values be in just this linear region (near `0` on sigmoid function).
   - What it does really is it then shows that your hidden units have standardized mean and variance, where the mean and variance are controlled by two explicit parameters `gamma` and `beta` which the learning algorithm can set to whatever it wants.
 
 ![batch-norm](img/batch-norm.png)
+
+_Notes_<br>
+- Use `z_tilde[l][i]` instead of `z[l][i]` for the later computations in the NN. 
+- `ε` is added in the square root for numerical stability (in case `σ^2` is zero in some estimate).
+- If `𝛾 = sqrt(variance + epsilon)` and `𝛽 = mean` then `z_tilde[i] = z[i]`.
 
 #### Fitting Batch Norm into a neural network
 

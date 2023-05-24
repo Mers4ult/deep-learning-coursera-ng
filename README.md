@@ -1,4 +1,5 @@
 # Deep Learning Specialization Course Notes
+forked from lijqhs/deeplearning-notes
 
 This is the notes of the [Deep Learning Specialization](https://www.coursera.org/specializations/deep-learning) courses offered by [deeplearning.ai](https://www.deeplearning.ai/) on Coursera.
 
