@@ -578,6 +578,18 @@ _Notes_<br>
 
 #### Softmax Regression
 
+- In every example we have used so far we were talking about binary classification. 
+  - There is a generalization of logistic regression called Softmax regression that is used for multiclass classification.
+
+_Notation_<br>
+- `C` = no. of classes; Range: (0, ..., C-1)
+- Each of `C` values in the output layer will contain a probability of the example to belong to each of the classes.
+- In the last layer we will have to activate the softmax activation function instead of the sigmoid activation.
+
+_Softmax activation equations_<br>
+```t = e^(Z[L]) # shape(C, m)
+A[L] = e^(Z[L]) / sum(t) # shape(C, m), sum(t) - sum of t's for each example (shape (1, m))
+```
 Use softmax activation function.
 
 ```python
