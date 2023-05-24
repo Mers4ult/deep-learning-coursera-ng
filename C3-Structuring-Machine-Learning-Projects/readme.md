@@ -1,5 +1,7 @@
 # Course 3: Structuring Machine Learning Projects
 
+Also from ML Yearning (TODO: add link)
+
 - [Course 3: Structuring Machine Learning Projects](#course-3-structuring-machine-learning-projects)
   - [Week 1: ML Strategy (1)](#week-1-ml-strategy-1)
     - [Learning Objectives](#learning-objectives)
@@ -53,10 +55,11 @@
 *Ideas to improve a machine learning system*:
 
 - Collect more data
-- Collect more diverse training set
+- Collect more diverse training set 
+  - e.g., pics in unusual positions, unusual coloration, shot with a variety of camera settings
 - Train algorithm longer with gradient descent
 - Try Adam instead of gradient descent
-- Try bigger network
+- Try bigger network,  with more layers/hidden units/parameters.
 - Try smaller network
 - Try dropout
 - Add L2 regularization
@@ -69,6 +72,7 @@ In order to have quick and effective ways to figure out which of all of these id
 
 #### Orthogonalization
 
+_Motivation examples_<br>
 In the example of TV tuning knobs, orthogonalization refers to that the TV designers had designed the knobs so that each knob kind of does only one thing.
 
 In a car the stearing wheel controls the angle and the accelerator and brake control the speed. If there are two controllers, each has different effect simultaneously on angle and speed, then it's much harder to set the car to the speed and angle we want.
@@ -80,9 +84,14 @@ In a car the stearing wheel controls the angle and the accelerator and brake con
 
 Orthogonal means at 90 degrees to each other. By having orthogonal controls that are ideally aligned with the things we actually want to control. It makes it much easier to tune the knobs we have to tune. To tune the steering wheel angle, and the accelerator, the brake, to get the car to do what we want.
 
+- Some deep learning developers know exactly what hyperparameter to tune in order to try to achieve one effect. This is a process we call orthogonalization.
+- In orthogonalization, you have some controls, but each control does a specific task and doesn't affect other controls.
+
+For a supervised learning system to do well, you usually need to tune the knobs of your system to make sure that four things hold true:
+
 | chain of assumptions in ML | tune the *knobs* |
 | :---- | :---- |
-| Fit training set well on cost function | bigger network<br>better optimization algorithm, Adam... |
+| Fit training set well on cost function (near human level performance if possible) | bigger network<br>better optimization algorithm, Adam... |
 | Fit dev set well on cost function | regularization<br>bigger training set |
 | Fit test set well on cost function | bigger dev set |
 | Performs well in real world | change dev set or cost function<br>(dev test set distribution not correct or cost function not right) |
@@ -100,6 +109,29 @@ Evaluation metric allows you to quickly tell if classifier A or classifier B is 
 | Precision | `P = TP/(TP+FP)` | percentage of true positive in predicted positive |
 | Recall | `R = TP/(TP+FN)` | percentage of true positive predicted in all real positive |
 | F1 score | `F1 = 2PR/(P+R)` or `1/F1 = (1/P+1/R)/2` | harmonic mean of precision and recall |
+
+Classification accuracy is an example of a ​single-number evaluation metric​: You run your classifier on the dev set (or test set), and get back a single number about what fraction
+of examples it classified correctly. According to this metric, if classifier A obtains 97% accuracy, and classifier B obtains 90% accuracy, then we judge classifier A to be superior.
+
+In contrast, Precision and Recall is not a single-number evaluation metric: It gives two numbers for assessing your classifier. Having multiple-number evaluation metrics makes it
+harder to compare algorithms. Suppose your algorithms perform as follows:
+
+| Classifier | Precision | Recall | F1 score |
+| :----: | :----: | :---- | :---- |
+| A | 95% | 90% | 92.4% |
+| A | 95% | 85% | 91.0% |
+
+- Here, neither classifier is obviously superior, so it doesn’t immediately guide you toward picking one.
+
+- During development, your team will try a lot of ideas about algorithm architecture, model parameters, choice of features, etc. Having a ​single-number evaluation metric​ such as accuracy allows you to sort all your models according to their performance on this metric, and quickly decide what is working best.
+
+- If you really care about both Precision and Recall, I recommend using one of the standard ways to combine them into a single number. For example, one could take the average of
+precision and recall, to end up with a single number. Alternatively, you can compute the `F1 score`, which combines them.
+
+- Having a single-number evaluation metric speeds up your ability to make a decision when you are selecting among a large number of classifiers. It gives a clear preference ranking
+among all of them, and therefore a clear direction for progress.
+
+- As a final example, suppose you are separately tracking the accuracy of your cat classifier in four key markets: (i) US, (ii) China, (iii) India, and (iv) Other. This gives four metrics. By taking an average or weighted average of these four numbers, you end up with a single number metric. Taking an average or weighted average is one of the most common ways to combine multiple metrics into one.
 
 #### Satisficing and optimizing metric
 

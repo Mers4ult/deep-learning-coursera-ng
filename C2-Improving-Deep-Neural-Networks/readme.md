@@ -583,7 +583,7 @@ _Notes_<br>
 
 _Notation_<br>
 - `C` = no. of classes; Range: (0, ..., C-1)
-- Each of `C` values in the output layer will contain a probability of the example to belong to each of the classes.
+- Each of `C` values in the output layer will contain a probability of the example to belong to each of the classes. (they sum up to 1)
 - In the last layer we will have to activate the softmax activation function instead of the sigmoid activation.
 
 _Softmax activation equations_<br>
@@ -601,6 +601,13 @@ z = [1,0.5,-2,1,3]
 print(softmax(z)) 
 # array([0.09954831, 0.0603791 , 0.00495622, 0.09954831, 0.73556806])
 ```
+
+The name softmax comes from contrasting it to what's called a hard max which would have taken the vector
+Z and matched it to a vector. So hard max function will look at the elements of Z and just put a 1 in the position
+of the biggest element of Z and then 0s everywhere else. And so this is a very hard max where the biggest
+element gets a output of 1 and everything else gets an output of 0. Whereas in contrast, a softmax is a more
+gentle mapping from Z to these probabilities. Softmax regression generalizes logistic regression to C classes. or
+we can say softmax regression is a generalization of logistic regression to more than two classes.
 
 #### Training a softmax classifier
 
