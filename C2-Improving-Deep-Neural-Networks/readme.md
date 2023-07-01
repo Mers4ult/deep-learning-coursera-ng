@@ -71,7 +71,7 @@
 - **Hyperparameter tuning** is a very iterative process with the goal of finding the best hyperparameters on the dev set (go through the loop many times: Idea* ==> Code ==> Experiment).
   - *Ideas for improving model: e.g., # of layers, # of hidden units, learning rates, ... 
 
-Setting up the training, development (dev, also called validate set) and test sets has a huge impact on productivity. It is important to choose the dev and test sets from the same distribution and it must be taken randomly from all the data.
+Setting up the training, development (dev, also called validate set) and test sets has a huge impact on productivity. **It is important to choose the dev and test sets from the same distribution and it must be taken randomly from all the data.**
 
 *Guideline*:
 
@@ -82,7 +82,7 @@ Setting up the training, development (dev, also called validate set) and test se
 
 *Size trends*:
 - If size of the dataset is 100 to 100K ==> 60/20/20
-- If size of the dataset is 100K to INF ==> 98/1/1 or 99.5/0.25/0.25
+- If size of the dataset is 100K to INF (Deep Learning) ==> 98/1/1 or 99.5/0.25/0.25 
 
 *Tips*:
 - Choose a dev set and test set to reflect data you expect to get in the future.
@@ -133,9 +133,7 @@ You should try the previous two points until you have a low bias and low varianc
 
 #### Regularization
 
-**Regularization for Logistic Regression**:
-
-**Regularization** is a method to reduce overfitting (variance). 
+**Regularization for Logistic Regression**: (to reduce variance/overfitting)
 
 #TODO: add math equations
 

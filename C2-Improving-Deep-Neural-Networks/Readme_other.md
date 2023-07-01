@@ -66,7 +66,7 @@ Here are the course summary as its given on the course [link](https://www.course
 
 
 ## Practical aspects of Deep Learning
-
+<!-- 
 ### Train / Dev / Test sets
 
 - Its impossible to get all your hyperparameters right on a new application from the first time.
@@ -84,9 +84,9 @@ Here are the course summary as its given on the course [link](https://www.course
 - Make sure the dev and test set are coming from the same distribution.
   - For example if cat training pictures is from the web and the dev/test pictures are from users cell phone they will mismatch. It is better to make sure that dev and test set are from the same distribution.
 - The dev set rule is to try them on some of the good models you've created.
-- Its OK to only have a dev set without a testing set. But a lot of people in this case call the dev set as the test set. A better terminology is to call it a dev set as its used in the development.
+- Its OK to only have a dev set without a testing set. But a lot of people in this case call the dev set as the test set. A better terminology is to call it a dev set as its used in the development. -->
 
-### Bias / Variance
+<!-- ### Bias / Variance
 
 - Bias / Variance techniques are Easy to learn, but difficult to master.
 - So here the explanation of Bias / Variance:
@@ -108,9 +108,9 @@ Here are the course summary as its given on the course [link](https://www.course
   - Best:
     - Training error: 0.5%
     - Test error: 1%
-  - These Assumptions came from that human has 0% error. If the problem isn't like that you'll need to use human error as baseline.
+  - These Assumptions came from that human has 0% error. If the problem isn't like that you'll need to use human error as baseline. -->
 
-### Basic Recipe for Machine Learning
+<!-- ### Basic Recipe for Machine Learning
 
 - If your algorithm has a high bias:
   - Try to make your NN bigger (size of hidden units, number of layers)
@@ -123,7 +123,7 @@ Here are the course summary as its given on the course [link](https://www.course
   - Try a different model that is suitable for your data.
 - You should try the previous two points until you have a low bias and low variance.
 - In the older days before deep learning, there was a "Bias/variance tradeoff". But because now you have more options/tools for solving the bias and variance problem its really helpful to use deep learning.
-- Training a bigger neural network never hurts.
+- Training a bigger neural network never hurts. -->
 
 ### Regularization
 
