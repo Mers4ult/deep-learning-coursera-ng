@@ -94,6 +94,7 @@ Setting up the training, development (dev, also called validate set) and test se
 
 ![train-dev-test-set](img/ML_train_dev_test_sets.png)
 
+
 #### Bias / Variance
 
 | error type | high variance | high bias | high bias, high variance | low bias, low variance | note |
