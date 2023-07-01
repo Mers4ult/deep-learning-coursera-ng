@@ -37,3 +37,15 @@ Introduction from the specialization page:
 
 [fancy-course-summary]: https://www.slideshare.net/TessFerrandez/notes-from-coursera-deep-learning-courses-by-andrew-ng
 [math-html]: https://www.toptal.com/designers/htmlarrows/letters/
+
+Other links:
+- https://github.com/dair-ai/ML-Course-Notes
+- https://github.com/Kulbear/deep-learning-coursera
+- https://github.com/azminewasi/Deep-Learning-AndrewNg-DeepLearning.AI
+- https://github.com/ahsan-83/Deep-Learning-Specialization-Coursera
+- https://github.com/saqemlas/deep-learning-specialization
+- https://github.com/saqemlas/deep-learning-specialization
+- https://github.com/pabaq/Coursera-Deep-Learning-Specialization
+- https://github.com/greyhatguy007/deep-learning-specialization
+- https://github.com/abdur75648/Deep-Learning-Specialization-Coursera
+- https://github.com/amanchadha/coursera-deep-learning-specialization
