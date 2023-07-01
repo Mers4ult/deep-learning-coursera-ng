@@ -63,6 +63,20 @@
       - [Style Cost Function](#style-cost-function)
       - [1D and 3D Generalizations](#1d-and-3d-generalizations)
 
+# Course summary
+
+Here is the course summary as given on the course [link](https://www.coursera.org/learn/convolutional-neural-networks):
+
+> This course will teach you how to build convolutional neural networks and apply it to image data. Thanks to deep learning, computer vision is working far better than just two years ago, and this is enabling numerous exciting applications ranging from safe autonomous driving, to accurate face recognition, to automatic reading of radiology images. 
+>
+> You will:
+> - Understand how to build a convolutional neural network, including recent variations such as residual networks.
+> - Know how to apply convolutional networks to visual detection and recognition tasks.
+> - Know to use neural style transfer to generate art.
+> - Be able to apply these algorithms to a variety of image, video, and other 2D or 3D data.
+>
+> This is the fourth course of the Deep Learning Specialization.
+
 ## Week 1: Foundations of Convolutional Neural Networks
 
 ### Learning Objectives
@@ -78,14 +92,20 @@
 
 *Deep learning computer vision can now*:
 
-- help self-driving cars figure out where the other cars and pedestrians around so as to avoid them.
+- Do state-of-the-art image classification.
+- help self-driving cars figure out where the other cars and pedestrians around so as to avoid them. (Object detection => Detect object and localize them).
 - make face recognition work much better than ever before.
 - unlock a phone or unlock a door using just your face.
+- Neural style transfer
+  - Changes the style of an image using another image.
 
 *Deep learning for computer vision is exciting* because:
 
 - First, rapid advances in computer vision are enabling brand new applications to view, though they just were impossible a few years ago.
 - Second, even if you don't end up building computer vision systems per se, I found that because the computer vision research community has been so creative and so inventive in coming up with new neural network architectures and algorithms, is actually inspire that creates a lot cross-fertilization into other areas as well.
+
+- One of the challenges of computer vision problem that images can be so large and we want a fast and accurate algorithm to work with that.
+  - For example, a `1000x1000` image will represent 3 million feature/input to the full connected neural network. If the following hidden layer contains 1000, then we will want to learn weights of the shape `[1000, 3 million]` which is 3 billion parameter only in the first layer and thats so computationally expensive!
 
 For computer vision applications, you don't want to be stuck using only tiny little images. You want to use large images. To do that, you need to better implement the **convolution operation**, which is one of the fundamental building blocks of **convolutional neural networks**.
 
@@ -97,7 +117,7 @@ For computer vision applications, you don't want to be stuck using only tiny lit
 
 The *convolution operation* gives you a convenient way to specify how to find these **vertical edges** in an image.
 
-A `3 by 3` filter or `3 by 3` matrix may look like below, and this is called a vertical edge detector or a vertical edge detection filter. In this matrix, pixels are relatively bright on the left part and relatively dark on the right part.
+A `3 by 3` filter/kernel or `3 by 3` matrix may look like below, and this is called a vertical edge detector or a vertical edge detection filter. In this matrix, pixels are relatively bright on the left part and relatively dark on the right part.
 
 ```text
 1, 0, -1
@@ -105,9 +125,16 @@ A `3 by 3` filter or `3 by 3` matrix may look like below, and this is called a v
 1, 0, -1
 ```
 
-Convolving it with the vertical edge detection filter results in detecting the vertical edge down the middle of the image. 
+Convolving it with the vertical edge detection filter results in _detecting the vertical edge down the middle of the image._ 
 
 ![edge-detection](img/edge-detect-v.png)
+
+_Notes_:<br>
+- The `*` sign denotes the convolution operation.
+- In the last example a `6x6` matrix convolved with `3x3` filter/kernel gives us a `4x4` matrix. This is done by taking the element-wise product.
+- If you make the convolution operation in TensorFlow you will find the function `tf.nn.conv2d`; in keras you will find `Conv2d` function.
+- The vertical edge detection filter will find a `3x3` place in an image where there are a bright region followed by a dark region.
+- If we applied this filter to a white region followed by a dark region, it should find the edges in between the two colors as a positive value. But if we applied the same filter to a dark region followed by a white region it will give us negative values. To solve this we can use the `abs` function to make it positive.
 
 #### More Edge Detection
 
@@ -144,7 +171,7 @@ w4, w5, w6
 w7, w8, w9
 ```
 
-By just letting all of these numbers be parameters and learning them automatically from data, we find that neural networks can actually learn low level features, can learn features such as edges, even more robustly than computer vision researchers are generally able to code up these things by hand.
+By just letting all of these numbers be parameters (instead of hardcoding them) and learning them automatically from data (using backpropagation), we find that neural networks can actually learn low level features, can learn features such as edges, even more robustly than computer vision researchers are generally able to code up these things by hand.
 
 #### Padding
 
@@ -158,23 +185,31 @@ In order to fix the following two problems, padding is usually applied in the co
 - image size: `n x n`
 - convolution size: `f x f`
 - padding size: `p`
+  - `p`: the number of row/columns that we will insert in top, bottom, left and right of the image.
 
 *Output size after convolution*:
 
 - without padding: `(n-f+1) x (n-f+1)`
 - with padding: `(n+2p-f+1) x (n+2p-f+1)`
 
+_Note_:<br>
+- The convolution operation shrinks the matrix if f>1.
+
 *Convention*:
 
-- Valid convolutions: no padding
-- Same convolutions: output size is the same as the input size
+- Valid convolutions: no padding `P=0`
+- Same convolutions: output size is the same as the input size => `P = (f-1) / 2`
 - `f` is usually odd
+- In almost all the cases the padding values are zeros.
+
 
 #### Strided Convolutions
 
 *Notation*:
 
 - stride `s`
+  - pace wee are scanning with
+  - it is the number of pixels we will jump when we are convolving filter/kernel; in previous examples, `s=1`.
 
 *Output size after convolution*: `floor((n+2p-f)/s+1) x floor((n+2p-f)/s+1)`
 
@@ -183,36 +218,115 @@ In order to fix the following two problems, padding is usually applied in the co
 - The filter must lie entirely within the image or the image plus the padding region.
 - In the deep learning literature by convention, a convolutional operation (maybe better *called cross-correlation*) is what we usually do not bother with a flipping operation, which is included before the product and summing step in a typical math textbook or a signal processing textbook.
   - In the latter case, the filter is flipped vertically and horizontally.
+- Same convolutions is a convolution with a padding so that output size is the same as the input size. Its given by the equation:
+
+  ```
+  p = (n*s - n + f - s) / 2
+  When s = 1 ==> P = (f-1) / 2
+  ```
 
 #### Convolutions Over Volume
 
-For a RGB image, the filter itself has three layers corresponding to the red, green, and blue channels.
+For a RGB image, the filter itself has three layers corresponding to the red, green, and blue channels (3D).
+- We will convolve an image of height, width, # of channels with a filter of a height, width, same # of channels. 
+  - Each filter operates on one channel.
+  - The image number channels and the filter number of channels must be the same.
+  - We can call this as stacked filters for each channel!
+- This allows us to detect features in colour images (RCB)
 
 `height x width x channel`
 
 `n x n x nc` * `f x f x nc` --> `(n-f+1) x (n-f+1) x nc'`
 
+- Example:
+  - Input image: `6x6x3`
+  - Filter: `3x3x3`
+  - Result image: `4x4x1`
+    - each 27 params of the filter are multiplied with the corresponding 27 numbers from the RGB and then summed
+  - In the last result `p=0`, `s=1`
+  - The output here is only 2D.
+
+#### Multiple filters
+
+- We can use **multiple filters** to detect multiple features (e.g., vertical and horizontal edges) at a time. Example.
+  - Input image: `6x6x3`
+  - 10 Filters: `3x3x3`
+  - Result image: `4x4x10`
+  - In the last result `p=0`, `s=1`
+
 #### One Layer of a Convolutional Network
 
-*Notations*:
 
-| size | notation |
-| :---- | :---- |
-| filter size | ![f(l)](img/layer_filter_size.svg) |
-| padding size | ![p(l)](img/layer_padding_size.svg) |
-| stride size | ![s(l)](img/layer_stride_size.svg) |
-| number of filters | ![nc(l)](img/layer_num_filters.svg) |
-| filter shape | ![filter_shape](img/layer_filter_shape.svg) |
-| input shape | ![input_shape](img/layer_input_shape.svg) |
-| output shape | ![output_shape](img/layer_output_shape.svg) |
-| output height | ![nh(l)](img/layer_output_height.svg) |
-| output width | ![nw(l)](img/layer_output_width.svg) |
-| activations `a[l]` | ![activations](img/layer_output_shape.svg) |
-| activations `A[l]` | ![activations](img/layer_activations.svg) |
-| weights | ![weights](img/layer_weights.svg) |
-| bias | ![bias](img/layer_bias.svg) |
+- First we convolve some filters to a given input and then add a bias to each filter output and then get RELU of the result. Above:
+  - Input image: `6x6x3`                                     `# a0`
+  - 2 Filters: `3x3x3`                                       `# W1`
+  - Result image: `4x4x2`                                    `# W1*a0`
+  - Add b (bias) with `2x1` will get us : `4x4x2` image      `# W1*a0 + b`
+  - Apply RELU will get us: `4x4x2` image                    `# a1 = RELU(W1*a0 + b)`
+  - In the last result p=0, s=1
+  - Hint number of parameters here are: `(3x3x3x2) + 2 = 56`
+- The last example forms a layer in the CNN.
+
+_Note:_<br> 
+No matter the size of the input, the learnable parameters `w` & `b` only depend on the number of filters and their sizes. => That makes it less prone to overfitting.
+
+*Notations for layer `l` in a conv layer*:
+
+| size | notation | comment |
+| :---- | :---- | :---- |
+| filter size | ![f(l)](img/layer_filter_size.svg) | Hyperparameter |
+| padding size | ![p(l)](img/layer_padding_size.svg) | Hyperparameter (def: 0) |
+| stride size | ![s(l)](img/layer_stride_size.svg) | Hyperparameter |
+| number of filters | ![nc(l)](img/layer_num_filters.svg) | Hyperparameter |
+| ---- | ----| ---- |
+| filter shape | ![filter_shape](img/layer_filter_shape.svg) | - |
+| input shape | ![input_shape](img/layer_input_shape.svg) | - |
+| output shape | ![output_shape](img/layer_output_shape.svg) | - |
+| output height | ![nh(l)](img/layer_output_height.svg) | - |
+| output width | ![nw(l)](img/layer_output_width.svg) | - |
+| ---- | ----| ---- |
+| activations `a[l]` | ![activations](img/layer_output_shape.svg) | - |
+| activations `A[l]` | ![activations](img/layer_activations.svg) | `m`: # of samples |
+| ---- | ----| ---- |
+| weights | ![weights](img/layer_weights.svg) | - |
+| bias | ![bias](img/layer_bias.svg) | - |
 
 #### Simple Convolutional Network
+
+![example-deep-cnn](img/deep_cnn_example.png)
+
+_Notes:_<br>
+
+- Input Image:
+  - `a[0] = 39x39x3`
+  - `n[0] = n_H[0] = n_W[0] = 39` & `n_c[0] = 3`
+
+- First layer (Conv layer):
+  - `f[1] = 3`, `s[1] = 1`, & `p[1] = 0`
+  - `number of filters = 10`
+  - Output: 
+    - `a[1] = 37x37x10`
+    - `n[1] = 37` and `n_c[1] = 10`
+
+- Second layer (Conv layer):
+  - `f[2] = 5`, `s[2] = 2`, `p[2] = 0`
+  - `number of filters = 20`
+  - Output: 
+    - `a[2] = 17x17x20`
+    - `n[2] = 17`, `n_c[2] = 20`
+  - Shrinking goes much faster because the stride is 2
+
+- Third layer (Conv layer):
+  - `f[3] = 5`, `s[3] = 2`, `p[3] = 0`
+  - `number of filters = 40`
+  - Output:
+    - `a[3] = 7x7x40`
+    - `n[3] = 7`, `n_c[3] = 40`
+
+- Forth layer (Fully connected Softmax)
+  - `a[3] = 7x7x40 = 1960`  as a vector.
+
+- In the last example you seen that the image is getting smaller after each layer and thats the trend now.
 
 Types of layer in a convolutional network:
 
@@ -222,19 +336,42 @@ Types of layer in a convolutional network:
 
 #### Pooling Layers
 
+- Other than the conv layers, CNNs often uses pooling layers to:
+  - reduce the size of the inputs, 
+  - speed up computation, and
+  - make some of the features it detects more robust.
+
+- Max pooling example:
+  - ![max-pool](img/max_pool.png)
+  - This example has `f = 2`, `s = 2`, and `p = 0` hyperparameters
+  - We are finding the max in each section.
+- Example of Max pooling on 3D input:
+  - Input: `4x4x10`
+  - `Max pooling size = 2` and `stride = 2`
+  - Output: `2x2x10`
+
+_Intuition:_<br>
+- The max pooling is saying, if the feature is detected anywhere in this filter then keep a high number. 
+-But the main reason why people are using pooling because its works well in practice and reduce computations.
+
+_Notes_:_<br>
 - One interesting property of max pooling is that it has a set of hyperparameters but it has no parameters to learn. There's actually nothing for gradient descent to learn.
 - Formulas that we had developed previously for figuring out the output size for conv layer also work for max pooling.
-- The max pooling is used much more often than the average pooling.
+
+_Tips:_<br>
+- The max pooling is used much more often than the average pooling. (avg for very deep NN)
 - When you do max pooling, usually, you do not use any padding.
+- If stride of pooling equals the size, it will then apply the effect of shrinking.
 
 #### CNN Example
  
 - Because the pooling layer has no weights, has no parameters, only a few hyper parameters, I'm going to use a convention that `CONV1` and `POOL1` shared together.
 - As you go deeper usually the *height* and *width* will decrease, whereas the number of *channels* will increase.
 - max pooling layers don't have any parameters
-- The conv layers tend to have relatively few parameters and a lot of the parameters tend to be in the fully collected layers of the neural network.
+- The conv layers tend to have relatively few parameters and a lot of the parameters tend to be in the fully connected layers of the neural network.
 - The activation size tends to maybe go down *gradually* as you go deeper in the neural network. If it drops too quickly, that's usually not great for performance as well.
 
+*ConvNet example (based on LeNet-5)*:
 ![nn-example](img/nn-example.png)
 
 *Layer shapes of the network*:
@@ -250,17 +387,27 @@ Types of layer in a convolutional network:
 | FC4 | (84,1) | 84 | 10164 `=120*84+84` |
 | softmax | (10,1) | 10 | 850 `=84*10+10` |
 
+_Notes_:<br>
+- A lot of hyperparameters. For choosing the value of each you should follow the guideline that we will discuss later or check the literature and takes some ideas and numbers from it.
+- Usually the input size decreases over layers while the number of filters (channels) increases.
+- A CNN usually consists of one or more convolution (Not just one as the shown examples) followed by a pooling.
+- Fully connected layers has the most parameters in the network.
+- To consider using these blocks together you should look at other working examples firsts to get some intuitions.
+
 #### Why Convolutions
 
 There are two main advantages of convolutional layers over just using fully connected layers.
 
-- Parameter sharing: A feature detector (such as a vertical edge detector) that’s useful in one part of the image is probably useful in another part of the image.
-- Sparsity of connections: In each layer, each output value depends only on a small number of inputs.
+- **Parameter sharing**: A feature detector (such as a vertical edge detector) that’s useful in one part of the image is probably useful in another part of the image.
+- **Sparsity of connections**: In each layer, each output value depends only on a small number of inputs.
 
 Through these two mechanisms, a neural network has a lot fewer parameters which allows it to be trained with smaller training cells and is less prone to be overfitting.
 
 - Convolutional structure helps the neural network encode the fact that an image shifted a few pixels should result in pretty similar features and should probably be assigned the same output label.
 - And the fact that you are applying the same filter in all the positions of the image, both in the early layers and in the late layers that helps a neural network automatically learn to be more robust or to better capture the desirable property of translation invariance.
+
+- Putting it all together:
+![put-all-together](img/wk1_summary.png)
 
 ## Week 2: Classic Networks
 
