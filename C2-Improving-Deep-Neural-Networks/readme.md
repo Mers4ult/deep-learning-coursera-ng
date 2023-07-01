@@ -92,7 +92,7 @@ Setting up the training, development (dev, also called validate set) and test se
 - Its OK to only have a dev set without a testing set. 
   - Still call it a dev set as its used in the development, and not test set.
 
-![train-dev-test-set](img/ML_train_dev_test_sets.png)
+![train-dev-test-set](img/ML-train-dev-test-sets.png)
 
 
 #### Bias / Variance
@@ -114,7 +114,7 @@ _Notes_<br>
 
 > When we discuss prediction models, prediction errors can be decomposed into two main subcomponents we care about: error due to "bias" and error due to "variance". There is a tradeoff between a model's ability to minimize bias and variance. Understanding these two types of error can help us diagnose model results and avoid the mistake of over- or under-fitting.
 
-![bias-variance](img/bias_variance.png)
+![bias-variance](img/bias-variance.png)
 
 To understand bias and variance better, read this essay: [Understanding the Bias-Variance Tradeoff][bias-variance-tradeoff].
 
