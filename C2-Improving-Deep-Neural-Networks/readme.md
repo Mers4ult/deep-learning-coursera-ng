@@ -52,9 +52,9 @@
       - [Deep learning frameworks](#deep-learning-frameworks)
       - [Tensorflow](#tensorflow)
 
-## Wek 1: Practical aspects of Deep Learning
+# Week 1: Practical aspects of Deep Learning
 
-### Learning Objectives
+## Learning Objectives
 
 - Give examples of how different types of initializations can lead to different results
 - Examine the importance of initialization in complex neural networks
@@ -64,9 +64,9 @@
 - Explain Vanishing and Exploding gradients and how to deal with them
 - Use gradient checking to verify the accuracy of your backpropagation implementation
 
-### Setting up your Machine Learning Application
+## Setting up your Machine Learning Application
 
-#### Train / Dev / Test sets
+### Train / Dev / Test sets
 
 - **Hyperparameter tuning** is a very iterative process with the goal of finding the best hyperparameters on the dev set (go through the loop many times: Idea* ==> Code ==> Experiment).
   - *Ideas for improving model: e.g., # of layers, # of hidden units, learning rates, ... 
@@ -94,8 +94,7 @@ Setting up the training, development (dev, also called validate set) and test se
 
 ![train-dev-test-set](img/ML-train-dev-test-sets.png)
 
-
-#### Bias / Variance
+### Bias / Variance
 
 | error type | high variance | high bias | high bias, high variance | low bias, low variance | note |
 | :---- | :----: | :----: | :----: | :----: | :----: |
@@ -118,7 +117,7 @@ _Notes_<br>
 
 To understand bias and variance better, read this essay: [Understanding the Bias-Variance Tradeoff][bias-variance-tradeoff].
 
-#### Basic Recipe for Machine Learning
+### Basic Recipe for Machine Learning
 
 ![bias-variance-tradeoff](img/bias-variance-tradeoff.png)
 
@@ -138,7 +137,12 @@ You should try the previous two points until you have a low bias and low varianc
 
 #TODO: add math equations
 
+More formally, the idea of regularization is to train models with an augmented objective $J : \mathcal{M} \to \mathbb{R}$ defined over a training dataset $\mathcal{D}$ of size $n$ as
+
+$$J(f) = \underbrace{\frac{1}{n} \sum_{i=1}^n L(y^{(i)}, f(x^{(i)}))}_\text{Learning Objective} + \underbrace{\lambda \cdot R(f)}_\text{New Regularization Term}$$
+
 - Remember we want to min J(w, b)...
+
 ![reg-cost](img/reg-logistic-cost.svg)
 
 - `b` is just one parameter over a very large number of parameters, so no need to include it in the regularization.
@@ -201,7 +205,7 @@ With regularization the coefficient of `w` is slightly less than `1`, in which c
 - The new term `(1 - (learning_rate*lambda)/m) * w[l]`  causes the **weight to decay** in proportion to its size.
 
 
-#### Why regularization reduces overfitting
+### Why regularization reduces overfitting
 
 - Intuition 1:
   - If we make regularization lambda to be very big, then weight matrices (`w`'s) will be set to be reasonably close to zero, effectively zeroing out a lot of the impact of the hidden units. Then the simplified neural network becomes a much smaller neural network, eventually almost like a logistic regression (smoother decision boundaries). We'll end up with a much smaller network that is therefore less prone to overfitting (since it will reduce some weights that makes the neural network overfit). If `lambda` too high, it can increase bias though, so we need to find the correct value.
@@ -214,7 +218,7 @@ Without regularization term, we should see the cost function decreases **monoton
 
 _**Implementation tip**_: if you implement gradient descent, one of the steps to debug gradient descent is to plot the cost function J as a function of the number of iterations of gradient descent and you want to see that the cost function J decreases **monotonically** after every elevation of gradient descent with regularization. If you plot the old definition of J (no regularization) then you might not see it decrease monotonically.
 
-#### Dropout Regularization
+### Dropout Regularization
 
 - Dropout is another powerful regularization technique.
 - With dropout, what we're going to do is go through each of the layers of the network and set some probability of eliminating a node in neural network (`keep_prob = 0.5` a common value). 
@@ -244,7 +248,7 @@ _**Implementation tip**_: if you implement gradient descent, one of the steps to
 - At test time we don't use dropout. If you implement dropout at test time - it would add noise to predictions.
 
 
-#### Understanding Dropout
+### Understanding Dropout
 
 - Intuition 1: Dropout randomly knocks out units in your network. So it's as if on every iteration you're working with a smaller NN, and so using a smaller NN seems like it should have a regularizing effect.
 - Intuition 2: Can't rely on any one feature, so have to spread out weights, which has an effect of shrinking the squared norm of the weights, similar to what we saw with L2 regularization, helping prevent overfitting.
@@ -261,7 +265,7 @@ _**Implementation tip**_: if you implement gradient descent, one of the steps to
 - Deep learning frameworks like [tensorflow](https://www.tensorflow.org/api_docs/python/tf/nn/dropout), [PaddlePaddle](https://www.paddlepaddle.org.cn/documentation/docs/en/api/layers/dropout.html), [keras](https://keras.io/api/layers/regularization_layers/dropout/) or [caffe](http://caffe.berkeleyvision.org/tutorial/layers/dropout.html) come with a dropout layer implementation. 
 
 
-#### Other regularization methods
+### Other regularization methods
 
 - **Data augmentation**: getting more training data can be expensive and sometimes can't get more data, so flipping horizontally, random cropping, random distortion and translation of image can make additional fake training examples (`m` more instances each).
   - New data obtained using this technique isn't as good as the real independent data, but still can be used as a regularization technique.
@@ -280,7 +284,7 @@ _**Implementation tip**_: if you implement gradient descent, one of the steps to
   
 Related to **orthogonalization**, explained later, stay tuned!
 
-### Setting up your optimization problem
+## Setting up your optimization problem
 
 #### Normalizing inputs
 
