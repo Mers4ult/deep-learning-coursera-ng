@@ -137,13 +137,10 @@ You should try the previous two points until you have a low bias and low varianc
 
 #TODO: add math equations
 
-More formally, the idea of regularization is to train models with an augmented objective $J : \mathcal{M} \to \mathbb{R}$ defined over a training dataset $\mathcal{D}$ of size $n$ as
-
-$$ J(f) = \underbrace{\frac{1}{n} \sum_{i=1}^n L(y^{(i)}, f(x^{(i)}))}_\text{Learning Objective} + \underbrace{\lambda \cdot R(f)}_\text{New Regularization Term} $$
-
 - Remember we want to min J(w, b)...
 
-![reg-cost](img/reg-logistic-cost.svg)
+![reg-cost](img/reg-logistic-cost.png)
+<!-- ![reg-cost](img/reg-logistic-cost.svg) -->
 
 - `b` is just one parameter over a very large number of parameters, so no need to include it in the regularization.
 - first term: cost function, 2nd: regularisation
