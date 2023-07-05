@@ -135,11 +135,9 @@ You should try the previous two points until you have a low bias and low varianc
 
 **Regularization for Logistic Regression**: (to reduce variance/overfitting)
 
-#TODO: add math equations
+We want to `minJ(w, b)`, by tweaking `w` & `b`:
 
-- Remember we want to min J(w, b)...
-
-![reg-cost](img/reg-logistic-cost.png)
+![reg-cost](img/reg-logistic-cost2.png)
 <!-- ![reg-cost](img/reg-logistic-cost.svg) -->
 
 - `b` is just one parameter over a very large number of parameters, so no need to include it in the regularization.
