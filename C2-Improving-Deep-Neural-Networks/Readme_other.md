@@ -125,22 +125,23 @@ Here are the course summary as its given on the course [link](https://www.course
 - In the older days before deep learning, there was a "Bias/variance tradeoff". But because now you have more options/tools for solving the bias and variance problem its really helpful to use deep learning.
 - Training a bigger neural network never hurts. -->
 
-### Regularization
+<!-- ### Regularization
 
 - Adding regularization to NN will help it reduce variance (overfitting)
 - L1 matrix norm:
   - `||W|| = Sum(|w[i,j]|)  # sum of absolute values of all w`
 - L2 matrix norm because of arcane technical math reasons is called Frobenius norm:
   - `||W||^2 = Sum(|w[i,j]|^2)	# sum of all w squared`
-  - Also can be calculated as `||W||^2 = W.T * W if W is a vector`
-- Regularization for logistic regression:
+  - Also can be calculated as `||W||^2 = W.T * W if W is a vector` -->
+<!-- - Regularization for logistic regression:
   - The normal cost function that we want to minimize is: `J(w,b) = (1/m) * Sum(L(y(i),y'(i)))`
   - The L2 regularization version: `J(w,b) = (1/m) * Sum(L(y(i),y'(i))) + (lambda/2m) * Sum(|w[i]|^2)`
   - The L1 regularization version: `J(w,b) = (1/m) * Sum(L(y(i),y'(i))) + (lambda/2m) * Sum(|w[i]|)`
   - The L1 regularization version makes a lot of w values become zeros, which makes the model size smaller.
   - L2 regularization is being used much more often.
-  - `lambda` here is the regularization parameter (hyperparameter)
-- Regularization for NN:
+  - `lambda` here is the regularization parameter (hyperparameter) -->
+
+<!-- - Regularization for NN:
   - The normal cost function that we want to minimize is:   
     `J(W1,b1...,WL,bL) = (1/m) * Sum(L(y(i),y'(i)))`
 
@@ -166,10 +167,10 @@ Here are the course summary as its given on the course [link](https://www.course
 
   - In practice this penalizes large weights and effectively limits the freedom in your model.
 
-  - The new term `(1 - (learning_rate*lambda)/m) * w[l]`  causes the **weight to decay** in proportion to its size.
+  - The new term `(1 - (learning_rate*lambda)/m) * w[l]`  causes the **weight to decay** in proportion to its size. -->
 
 
-### Why regularization reduces overfitting?
+<!-- ### Why regularization reduces overfitting?
 
 Here are some intuitions:
   - Intuition 1:
@@ -179,10 +180,10 @@ Here are some intuitions:
      - If `lambda` is too large, w's will be small (close to zero) - will use the linear part of the _tanh_ activation function, so we will go from non linear activation to _roughly_ linear which would make the NN a _roughly_ linear classifier.
      - If `lambda` good enough it will just make some of _tanh_ activations _roughly_ linear which will prevent overfitting.
      
-_**Implementation tip**_: if you implement gradient descent, one of the steps to debug gradient descent is to plot the cost function J as a function of the number of iterations of gradient descent and you want to see that the cost function J decreases **monotonically** after every elevation of gradient descent with regularization. If you plot the old definition of J (no regularization) then you might not see it decrease monotonically.
+_**Implementation tip**_: if you implement gradient descent, one of the steps to debug gradient descent is to plot the cost function J as a function of the number of iterations of gradient descent and you want to see that the cost function J decreases **monotonically** after every elevation of gradient descent with regularization. If you plot the old definition of J (no regularization) then you might not see it decrease monotonically. -->
 
 
-### Dropout Regularization
+<!-- ### Dropout Regularization
 
 - In most cases Andrew Ng tells that he uses the L2 regularization.
 - The dropout regularization eliminates some neurons/weights on each iteration based on a probability.
@@ -214,7 +215,7 @@ _**Implementation tip**_: if you implement gradient descent, one of the steps to
 - If you're more worried about some layers overfitting than others, you can set a lower `keep_prob` for some layers than others. The downside is, this gives you even more hyperparameters to search for using cross-validation. One other alternative might be to have some layers where you apply dropout and some layers where you don't apply dropout and then just have one hyperparameter, which is a `keep_prob` for the layers for which you do apply dropouts.
 - A lot of researchers are using dropout with Computer Vision (CV) because they have a very big input size and almost never have enough data, so overfitting is the usual problem. And dropout is a regularization technique to prevent overfitting.
 - A downside of dropout is that the cost function J is not well defined and it will be hard to debug (plot J by iteration).
-  - To solve that you'll need to turn off dropout, set all the `keep_prob`s to 1, and then run the code and check that it monotonically decreases J and then turn on the dropouts again.
+  - To solve that you'll need to turn off dropout, set all the `keep_prob`s to 1, and then run the code and check that it monotonically decreases J and then turn on the dropouts again. -->
 
 ### Other regularization methods
 

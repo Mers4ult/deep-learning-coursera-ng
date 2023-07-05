@@ -142,7 +142,7 @@ We want to `minJ(w, b)`, by tweaking `w` & `b`:
 
 - `b` is just one parameter over a very large number of parameters, so no need to include it in the regularization.
 - first term: cost function, 2nd: regularisation
-- `lambda` here is the regularization parameter (hyperparameter), set using the dev set
+- `lambda` here is the regularization parameter (hyperparameter), set using the dev set.
 
 | regularization | formula | description |
 | :---- | :----: | :---- |
@@ -151,39 +151,32 @@ We want to `minJ(w, b)`, by tweaking `w` & `b`:
 
 - L1 matrix norm:
   - `||W|| = Sum(|w[i,j]|)  # sum of absolute values of all w`
-- L2 matrix norm:
+- L2 matrix norm (or Frobenius norm):
   - `||W||^2 = Sum(|w[i,j]|^2)	# sum of all w squared`
   - Also can be calculated as `||W||^2 = W.T * W if W is a vector`
 
-- Regularization for logistic regression:
-  - The normal cost function that we want to minimize is: `J(w,b) = (1/m) * Sum(L(y(i),y'(i)))`
-  - The L2 regularization version: `J(w,b) = (1/m) * Sum(L(y(i),y'(i))) + (lambda/2m) * Sum(|w[i]|^2)`
-  - The L1 regularization version: `J(w,b) = (1/m) * Sum(L(y(i),y'(i))) + (lambda/2m) * Sum(|w[i]|)`
-  - The L1 regularization version makes a lot of w values become zeros, which makes the model size smaller.
-  - L2 regularization is being used much more often.
+- The L1 regularization version makes a lot of w values become zeros, which makes the model size smaller.
+- L2 regularization is being used much more often.
 
 **Regularization for a Neural Network**:
 
 ![reg-cost](img/reg-nn-cost.svg)
-- The normal cost function that we want to minimize is:   
-  `J(W1,b1...,WL,bL) = (1/m) * Sum(L(y(i),y'(i)))`
-- The L2 regularization version:   
-  `J(w,b) = (1/m) * Sum(L(y(i),y'(i))) + (lambda/2m) * Sum((||W[l]||^2)`
+- first term: cost function, 2nd: regularisation
 - We stack the matrix as one vector `(mn,1)` and then we apply `sqrt(w1^2 + w2^2.....)`
 
 For the matrix `w`, this norm is called the Frobenius norm. Its definition looks like `L2` norm but is not called the `L2` norm:
 
 ![reg-cost](img/reg-nn-fnorm.svg)
-- 1st summation: # of neurons in current layer, 2nd: # neurons in previous layer 
+- 1st summation: # of neurons in current layer [l], 2nd: # neurons in previous layer [l-1]
 
 Regularization of gradient:
+
+![reg-nn-grad](img/reg-nn-grad.svg)
 
 - To do back propagation (old way):   
   `dw[l] = (from back propagation)`
 - The new way:   
   `dw[l] = (from back propagation) + lambda/m * w[l]`
-
-![reg-nn-grad](img/reg-nn-grad.svg)
 
 With regularization the coefficient of `w` is slightly less than `1`, in which case it is called **weight decay**.
 - So plugging it in weight update step:
@@ -199,19 +192,17 @@ With regularization the coefficient of `w` is slightly less than `1`, in which c
 - In practice this penalizes large weights and effectively limits the freedom in your model.
 - The new term `(1 - (learning_rate*lambda)/m) * w[l]`  causes the **weight to decay** in proportion to its size.
 
-
 ### Why regularization reduces overfitting
 
 - Intuition 1:
-  - If we make regularization lambda to be very big, then weight matrices (`w`'s) will be set to be reasonably close to zero, effectively zeroing out a lot of the impact of the hidden units. Then the simplified neural network becomes a much smaller neural network, eventually almost like a logistic regression (smoother decision boundaries). We'll end up with a much smaller network that is therefore less prone to overfitting (since it will reduce some weights that makes the neural network overfit). If `lambda` too high, it can increase bias though, so we need to find the correct value.
-- Intuition 2 (with _tanh_ activation function):
-  - Taking activation function `g(Z)=tanh(Z)` as example, if lambda is large, then weights `W` are small and subsequently `Z` ends up taking relatively small values, where `g` and `Z` will be roughly linear which is not able to fit those very complicated decision boundary, i.e., less able to overfit. (will use the linear part of the _tanh_ activation function, so we will go from non linear activation to _roughly_ linear which would make the NN a _roughly_ linear classifier.)
+  - If we make regularization lambda to be very big, then weight matrices (`w`'s) will be set to be reasonably close to zero, effectively zeroing out a lot of the impact of the hidden units. Then the simplified neural network becomes a much smaller neural network, eventually almost like a logistic regression (smoother decision boundaries). We'll end up with a much smaller network that is therefore less prone to overfitting (since it will reduce some weights that makes the neural network overfit). 
+  - BUT: If `lambda` too high, it can increase bias though, so we need to find the correct value.
+- Intuition 2 (with `tanh` activation function):
+  - Taking activation function `g(Z)=tanh(Z)` as example, if lambda is large, then weights `W` are small and subsequently `Z` ends up taking relatively small values, where `g` and `Z` will be roughly linear which is not able to fit those very complicated decision boundary, i.e., less able to overfit. (will use the linear part of the `tanh` activation function, so we will go from non linear activation to _roughly_ linear which would make the NN a _roughly_ linear classifier.)
 
 *Implementation tips*:
 
-Without regularization term, we should see the cost function decreases **monotonically** in the learning curve plot (`J` vs no. of iterations). Whereas in the case of regularization, to debug gradient descent make sure that we plot `J` with a regularization term; otherwise, if we plot only the first term (the old J), we might not see a decrease monotonically.
-
-_**Implementation tip**_: if you implement gradient descent, one of the steps to debug gradient descent is to plot the cost function J as a function of the number of iterations of gradient descent and you want to see that the cost function J decreases **monotonically** after every elevation of gradient descent with regularization. If you plot the old definition of J (no regularization) then you might not see it decrease monotonically.
+Without regularization term, we should see the cost function decreases **monotonically** in the learning curve plot (`J vs no. of iterations`). Whereas in the case of regularization, to debug gradient descent make sure that we plot `J` with a regularization term; otherwise, if we plot only the first term (the old J), we might not see a decrease monotonically.
 
 ### Dropout Regularization
 
@@ -239,17 +230,19 @@ _**Implementation tip**_: if you implement gradient descent, one of the steps to
   # (ensures that the expected value of a3 remains the same) - to solve the scaling problem
   a3 = a3 / keep_prob       
   ```
+
 - Vector d[l] is used for forward and back propagation and is the same for them, but it is different for each iteration (pass) or training example.
 - At test time we don't use dropout. If you implement dropout at test time - it would add noise to predictions.
 
-
 ### Understanding Dropout
 
-- Intuition 1: Dropout randomly knocks out units in your network. So it's as if on every iteration you're working with a smaller NN, and so using a smaller NN seems like it should have a regularizing effect.
-- Intuition 2: Can't rely on any one feature, so have to spread out weights, which has an effect of shrinking the squared norm of the weights, similar to what we saw with L2 regularization, helping prevent overfitting.
+- Intuition 1: 
+  - Dropout randomly knocks out units in your network. So it's as if on every iteration you're working with a smaller NN, and so using a smaller NN seems like it should have a regularizing effect.
+- Intuition 2: 
+  - Can't rely on any one feature, so have to spread out weights, which has an effect of shrinking the squared norm of the weights, similar to what we saw with L2 regularization, helping prevent overfitting.
 - For layers where you're more worried about over-fitting, really the layers with a lot of parameters, you can set the key prop to be smaller to apply a more powerful form of drop out (so different `keep_prob` per layer). 
   - The input layer dropout has to be near 1 (or 1 - no dropout) because you don't want to eliminate a lot of features.
-  - Downside: this gives you even more hyperparameters to search for using cross-validation. One other alternative might be to have some layers where you apply dropout and some layers where you don't apply dropout and then just have one hyperparameter, which is a `keep_prob` for the layers for which you do apply dropouts.
+  - _Downside:_ this gives you even more hyperparameters to search for using cross-validation. One other alternative might be to have some layers where you apply dropout and some layers where you don't apply dropout and then just have one hyperparameter, which is a `keep_prob` for the layers for which you do apply dropouts.
 - Frequently used in computer vision, as the input size is so big, inputting all these pixels that you almost never have enough data, prone to overfitting.
 - Cost function `J` is no longer well-defined and harder to debug or double check that `J` is going downhill on every iteration. 
   - To solve that you'll need to turn off dropout, set all the `keep_prob`s to 1, and then run the code and check that it monotonically decreases J and then turn on the dropouts again.
