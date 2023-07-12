@@ -74,7 +74,7 @@ Here is the course summary as given on the course [link](https://www.coursera.or
 
 
 
-## Foundations of CNNs
+<!-- ## Foundations of CNNs
 
 > Learn to implement the foundational layers of CNNs (pooling, convolutions) and to stack them properly in a deep network to solve multi-class image classification problems.
 
@@ -318,7 +318,7 @@ Here is the course summary as given on the course [link](https://www.coursera.or
   - sparsity of connections.
     - In each layer, each output value depends only on a small number of inputs which makes it translation invariance.
 - Putting it all together:
-  - ![](Images/04.png)
+  - ![](Images/04.png) -->
 
 ## Deep convolutional models: case studies
 
